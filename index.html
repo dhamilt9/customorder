@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+	<script href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<style>
+		html, body{
+			background-color:white;
+			height:100%;
+			margin:0px;
+			padding:0px;
+		}
+		h2{
+			font-size:1.7em;
+			margin:0px;
+		}	
+		.selectGroup{
+			background-color:#689ABF;
+			color:white;
+		}
+		.selectContainer{
+			background-color:#689ABF;
+			height:100%;
+			padding:20px;
+			width:15%;
+			display:inline-block;
+			vertical-align:top;
+			min-width:235px;
+		}
+		#imageBox{
+			vertical-align:top;
+			display:inline-block;
+			width:540px;
+			height:420px;
+		}
+		#previewImage{
+			background-image:url("images/spinner.gif");
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: auto 15%;	
+			width:100%;
+			height:100%;
+		}
+		#pricePanel{
+			background-color:#939393;
+			border-radius:100%;
+			height:150px;
+			width:150px;
+			color:white;
+			text-align:center;
+			margin-top:90px;
+		}
+		#pricePanel2{
+			background-color:#00A753;
+			border-radius:100%;
+			height:120px;
+			width:120px;
+			color:white;
+			text-align:center;
+			margin:auto;
+			position:relative;
+			bottom:25px;
+			left:30px;
+		}
+		#pricePanel p{
+			font-size:1.5em;
+			color:white;
+			padding-top:25%;
+		}
+		#container{
+			height:100%;
+			white-space: nowrap;
+		}
+		#pricePanel2 p{
+			padding-top:30%;
+			white-space: normal;
+		}
+		#locationSelect{
+			display:none;
+		}
+		#rotate{
+			margin-top:20px;
+			cursor:pointer;
+			width:60px;
+			height:60px;
+			position:relative;
+			right:50px;
+		}
+		#price{
+			font-size:1.4em;
+		}
+		#sidebar{
+			vertical-align:top;
+			display:inline-block;
+			text-align:center;
+			position:relative;
+			right:40px;
+		}
+		.noselect {
+		  -webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none; /* Safari */
+			 -khtml-user-select: none; /* Konqueror HTML */
+			   -moz-user-select: none; /* Firefox */
+				-ms-user-select: none; /* Internet Explorer/Edge */
+					user-select: none; /* Non-prefixed version, currently
+										  supported by Chrome and Opera */
+		}
+	</style>
+</head>
+<body>
+	<div id="container" class="noselect">
+		<div class="selectContainer" class="noselect">
+			<div id="locationSelect" class="selectGroup">
+				<h2>Location</h2>
+				<div class="radio">
+					<label><input type="radio" name="location" value="ic2" checked="checked">Indian Creek</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="location" disabled>More to come</label>
+				</div>
+			</div>
+			<div id="style" class="selectGroup">
+				<h2>MAP STYLE</h2>
+
+				<div class="radio">
+					<label><input type="radio" name="style" value="pp" data-price=0 checked="checked">Plain plaster</label>
+				</div>		
+				<div class="radio">
+					<label><input type="radio" name="style" value="ss" data-price=20>Sandstone (+$20)</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="style" value="tp" data-price=20>Thermal pool (+$20)</label>
+				</div>		
+				<div class="radio">
+					<label><input type="radio" name="style" value="cl" data-price=40>Copper leaf (+$40)</label>
+				</div>
+			</div>
+			<div id="frame" class="selectGroup">
+				<h2>SHADOW</h2>
+				<div class="radio">
+					<label><input type="radio" name="shadow" value="no" data-price=0 checked="checked">No</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="shadow" value="ye" data-price=5>Yes (+$5)</label>
+				</div>
+			</div>
+			<div id="presentation" class="selectGroup">
+				<h2>PRESENTATION</h2>
+				<div class="radio">
+					<label><input type="radio" name="presentation" value="st" data-price=0 checked="checked">Stand</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="presentation" value="fr" data-price=20>Frame (+$20)</label>
+				</div>
+				<div class="radio">
+					<label><input type="radio" name="presentation" value="gr" data-price=80><span id="gridLabel">Grid (+$80)<span></label>
+				</div>		
+			</div>
+		</div>
+		<div id="imageBox" class="noselect">
+			<img id="previewImage" src=""/>	
+		</div>
+		<div id="sidebar">
+			<img id="rotate" src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/png/512/ios7-reverse-camera.png"/>
+			<div id="pricePanel" class="noselect">
+				<p><span id="price">$40</span><br>
+				+Shipping
+				</p>
+			</div>
+			<div id="pricePanel2" class="noselect">
+				<p>15% donated to <i>Friends of Indian Creek</i></p>
+			</div>
+		</div>
+	</div>
+	<script>
+		$( document ).ready(function() {
+			var loc="IC2";
+			var sty="PP";
+			var shad="NO";
+			var pre="ST";
+			var ang="1";
+			var price=40
+			$('#previewImage').attr('src', "images/"+loc+"_"+sty+"_"+shad+"_"+pre+"_1.jpg");
+			$('.selectContainer input[type=radio]').click(function(){
+				loc=$('input[name=location]:checked').val().toUpperCase();
+				sty=$('input[name=style]:checked').val().toUpperCase();
+				shad=$('input[name=shadow]:checked').val().toUpperCase();
+				pre=$('input[name=presentation]:checked').val().toUpperCase();
+				$('#previewImage').attr('src', "");
+				$('#previewImage').attr('src', "images/"+loc+"_"+sty+"_"+shad+"_"+pre+"_"+ang+".jpg");
+				var grRadio=$('input[value=gr]');
+				if (sty=="PP"){
+					$('#gridLabel').html("Grid (+$80)");
+					grRadio.data("price", 80);
+				}
+				if (sty=="SS" || sty=="TP"){
+					$('#gridLabel').html("Grid (+$180)");
+					grRadio.data("price", 180);
+				}
+				if (sty=="CL"){
+					$('#gridLabel').html("Grid (+$280)");
+					grRadio.data("price", 280);
+				}
+				price=40+$('input[name=style]:checked').data("price")+$('input[name=shadow]:checked').data("price")+$('input[name=presentation]:checked').data("price");
+				$('#pricePanel').html("<p><span id=\"price\">$" + price + "</span><br>+Shipping</p>");
+			});
+			$('#rotate').click(function(){
+				if (ang==1){
+					ang=2;
+				}else{
+					ang=1;
+				}
+				$('#previewImage').attr('src', "");
+				$('#previewImage').attr('src', "images/"+loc+"_"+sty+"_"+shad+"_"+pre+"_"+ang+".jpg");
+			});
+		});
+	</script>
+</body>
+</html>
